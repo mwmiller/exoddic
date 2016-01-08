@@ -5,6 +5,8 @@ defmodule Exoddic.Mixfile do
     [app: :exoddic,
      version: "0.0.1",
      elixir: "~> 1.2",
+     name: "Exoddic",
+     source_url: "https://github.com/mwmiller/exoddic",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      description: description,
@@ -17,7 +19,10 @@ defmodule Exoddic.Mixfile do
   end
 
   defp deps do
-    []
+    [
+      {:earmark, ">= 0.0.0", only: :dev},
+      {:ex_doc, "~> 0.11", only: :dev},
+    ]
   end
   defp description do
     """
@@ -27,7 +32,7 @@ defmodule Exoddic.Mixfile do
 
   defp package do
     [
-     files: ["lib", "priv", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
+     files: ["lib", "mix.exs", "README*", "LICENSE*", ],
      maintainers: ["Matt Miller"],
      licenses: ["MIT"],
      links: %{"GitHub" => "https://github.com/mwmiller/exoddic",}
