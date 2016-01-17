@@ -48,7 +48,7 @@ defmodule Exoddic do
             :my   -> float_odds_display(amount)
             :hk   -> float_odds_display(amount)
             :us   -> if amount > 0, do: "+#{amount}", else: "#{amount}"
-            :uk   -> format_fraction(amount)
+            :uk   -> format_fraction(amount, 1000)
         end
     end
 
@@ -59,10 +59,10 @@ defmodule Exoddic do
 
     defp float_odds_display(num), do: Float.to_string(num, [decimals: 3])
     defp prob_display(num), do: Float.to_string(num, [decimals: 15, compact: true])
-    defp format_fraction(number) do
-      num = number * 1000 |> round
-      denom = gcd(num,1000)
-      "#{Float.to_string(num/denom, [decimals: 0])}/#{Float.to_string(1000/denom, [decimals: 0])}"
+    defp format_fraction(number,biggest) do
+      num = number * biggest |> round
+      denom = gcd(num,biggest)
+      "#{Float.to_string(num/denom, [decimals: 0])}/#{Float.to_string(biggest/denom, [decimals: 0])}"
     end
 
     # To resolve fractionals as closely as possible for now.
