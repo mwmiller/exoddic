@@ -4,9 +4,11 @@ defmodule Exoddic.Converter.Uk do
     .uk-style traditional odds
   """
 
-  def from_prob(amount), do: (1/amount) - 1
+  def from_prob(amount) when amount == 0, do: 0.0
+  def from_prob(amount) when amount != 0, do: (1/amount) - 1
 
-  def to_prob(amount), do: 1/(amount+1);
+  def to_prob(amount) when amount == 0, do: 0.0
+  def to_prob(amount) when amount != 0, do: 1/(amount+1);
 
   @doc "Formatted as the nearest integer ratio with a denominator not larger than 1000"
   def for_display(amount) do

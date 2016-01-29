@@ -69,7 +69,7 @@ defmodule ExoddicTest do
   end
 
   test "representation equivalence" do
-    assert convert(1.20, [from: :eu, to: :us])   == "-500"#,   "EU to US"
+    assert convert(1.20, [from: :eu, to: :us])   == "-500",   "EU to US"
     assert convert("7/2", [from: :uk, to: :eu])  == "4.500",  "UK to EU"
     assert convert(-1.25, [from: :id, to: :uk])  == "4/5",    "ID to UK"
     assert convert(-0.8, [from: :my, to: :id])   == "1.250",  "MY to ID"
@@ -87,5 +87,13 @@ defmodule ExoddicTest do
     assert convert(4.2, [from: :hk, to: :hk])           == "4.200",    "HK"
   end
 
+  test "nonsensical zeros" do
+    assert convert(0, [from: :prob, to: :us]) == "+0",    "US"
+    assert convert(0, [from: :prob, to: :eu]) == "0.000", "EU"
+    assert convert(0, [from: :prob, to: :uk]) == "0/1",   "UK"
+    assert convert(0, [from: :prob, to: :id]) == "0.000", "ID"
+    assert convert(0, [from: :prob, to: :my]) == "0.000", "MY"
+    assert convert(0, [from: :prob, to: :hk]) == "0.000", "HK"
+  end
 
 end
