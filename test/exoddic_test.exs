@@ -1,5 +1,5 @@
 defmodule ExoddicTest do
-  use ExUnit.Case
+  use PowerAssert
   import Exoddic
   doctest Exoddic
 
