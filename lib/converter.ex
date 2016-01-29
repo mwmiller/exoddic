@@ -1,5 +1,8 @@
 defmodule Exoddic.Converter do
-   use Behaviour
+  use Behaviour
+  @moduledoc """
+  Converter behaviour definition
+  """
 
   @doc "Convert to the odds format from probability"
   defcallback from_prob(float) :: float
