@@ -94,6 +94,12 @@ defmodule ExoddicTest do
     assert convert(0, [from: :prob, to: :id]) == "0.000", "ID"
     assert convert(0, [from: :prob, to: :my]) == "0.000", "MY"
     assert convert(0, [from: :prob, to: :hk]) == "0.000", "HK"
+    assert convert("+0", [from: :us, to: :eu]) == "0.000", "US to EU"
+    assert convert("0.0", [from: :eu, to: :uk]) == "0/1", "EU to UK"
+    assert convert("0/1", [from: :uk, to: :id]) == "0.000", "UK to ID"
+    assert convert("-0", [from: :id, to: :my]) == "0.000", "ID to MY"
+    assert convert("-0.00", [from: :my, to: :hk]) == "0.000", "MY to HK"
+    assert convert(0.0, [from: :hk, to: :prob]) == "0.0", "HK to prob"
   end
 
 end

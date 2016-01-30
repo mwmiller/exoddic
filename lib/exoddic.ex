@@ -30,7 +30,7 @@ defmodule Exoddic do
       num_amount  = destring(amount)
       {from_module, to_module, for_display} = parse_options(options)
 
-      final_amount = from_module.to_prob(num_amount) |> to_module.from_prob
+      final_amount = num_amount |> from_module.to_prob |> to_module.from_prob
 
       if for_display, do: to_module.for_display(final_amount), else: final_amount
     end
