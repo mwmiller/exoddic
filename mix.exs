@@ -3,7 +3,7 @@ defmodule Exoddic.Mixfile do
 
   def project do
     [app: :exoddic,
-     version: "1.0.2",
+     version: "1.0.3",
      elixir: "~> 1.2",
      name: "Exoddic",
      source_url: "https://github.com/mwmiller/exoddic",

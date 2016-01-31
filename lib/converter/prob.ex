@@ -8,7 +8,7 @@ defmodule Exoddic.Converter.Prob do
 
   def to_prob(amount), do: amount
 
-  @doc "Formatted up to 15 decimal places as precision requires."
-  def for_display(amount), do: Float.to_string(amount, [decimals: 15, compact: true])
+  @doc "Formatted as an integer percentage"
+  def for_display(amount), do: "#{round(amount*100)}%"
 
 end

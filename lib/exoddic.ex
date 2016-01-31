@@ -27,7 +27,7 @@ defmodule Exoddic do
     """
     @spec convert(number | String.t, exoddic_options) :: String.t | number
     def convert(amount, options \\ []) do
-      num_amount  = destring(amount)
+      num_amount  = if is_bitstring(amount), do: destring(amount), else: amount
       {from_module, to_module, for_display} = parse_options(options)
 
       final_amount = num_amount |> from_module.to_prob |> to_module.from_prob
@@ -48,10 +48,14 @@ defmodule Exoddic do
         Module.concat([__MODULE__, Converter, Keyword.get(options, which, :prob) |> Atom.to_string |> String.capitalize])
     end
 
-    @spec destring(number | String.t) :: float
+    @spec destring(String.t) :: float
     defp destring(maybe_num) do
-      {num_amount, _} = if is_bitstring(maybe_num) and Regex.match?(~r/^[0-9\/+-\.]+$/, maybe_num), do: Code.eval_string(maybe_num), else: {maybe_num/1.0, :ok}
-      num_amount
+      {num, _} = cond do
+          Regex.match?(~r/^[0-9\/+-\.]+$/, maybe_num) -> Code.eval_string(maybe_num)
+          Regex.match?(~r/^[0-9\/\.]+%$/, maybe_num)  -> {String.to_float(String.strip(maybe_num,?%))/100, :ok}
+          true                                        -> {0.0, :error}  # It's an error, but we're not doing anything about it at present
+      end
+      num / 1.0
     end
 
 end
