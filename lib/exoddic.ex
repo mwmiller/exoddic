@@ -50,10 +50,10 @@ defmodule Exoddic do
 
     @spec destring(String.t) :: float
     defp destring(maybe_num) do
-      {num, _} = cond do
-          Regex.match?(~r/^[0-9\/+-\.]+$/, maybe_num) -> Code.eval_string(maybe_num)
-          Regex.match?(~r/^[0-9\/\.]+%$/, maybe_num)  -> {String.to_float(String.strip(maybe_num,?%))/100, :ok}
-          true                                        -> {0.0, :error}  # It's an error, but we're not doing anything about it at present
+      num = cond do
+          Regex.match?(~r/^[0-9\/+-\.]+$/, maybe_num) -> Code.eval_string(maybe_num) |> (fn({x,_}) -> x end).()
+          Regex.match?(~r/^[0-9\/\.]+%$/, maybe_num)  -> String.strip(maybe_num,?%) |> Float.parse |> (fn({x,_}) -> x/100 end).()
+          true                                        -> 0.0  # It's an error, but we're not doing anything about it at present
       end
       num / 1.0
     end
