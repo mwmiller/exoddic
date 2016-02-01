@@ -11,6 +11,7 @@ Currently supports the following formats:
 - :id Indonesian-style odds
 - :my Malaysian-style odds
 - :hk Hong Kong-style odds
+- :roi Return on investment
 
 ## Example usage
 
