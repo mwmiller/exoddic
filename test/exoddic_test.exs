@@ -74,14 +74,15 @@ defmodule ExoddicTest do
     assert convert(0.80, from: :prob, to: :roi)  == "25%",    "ROI"
   end
 
-  test "representation equivalence" do
-    assert convert(1.20, from: :eu, to: :us)    == "-500",   "EU to US"
-    assert convert("7/2", from: :uk, to: :eu)   == "4.500",  "UK to EU"
-    assert convert(-1.25, from: :id, to: :uk)   == "4/5",    "ID to UK"
-    assert convert(-0.8, from: :my, to: :id)    == "1.250",  "MY to ID"
-    assert convert(6.00, from: :hk, to: :my)    == "-0.167", "HK to MY"
-    assert convert("125%", from: :roi, to: :hk) == "1.250",  "ROI to HK"
-    assert convert("+350", from: :us, to: :roi) == "350%",   "US to ROI"
+  test "even money representation equivalence cycle" do
+    assert convert("50%", from: :prob, to: :uk)   == "1/1",    "Prob to UK"
+    assert convert("1/1", from: :uk, to: :eu)     == "2.000",  "UK to EU"
+    assert convert("2.000", from: :eu, to: :us)   == "+100",   "EU to US"
+    assert convert("+100", from: :us, to: :id)    == "-1.000", "US to ID"
+    assert convert("-1.000", from: :id, to: :my)  == "1.000",  "ID to MY"
+    assert convert("1.000", from: :my, to: :hk)   == "1.000",  "MY to HK"
+    assert convert("1.000", from: :hk, to: :roi)  == "100%",   "HK to ROI"
+    assert convert("100%", from: :roi, to: :prob) == "50%",    "ROI to Prob"
   end
 
   test "self convert" do
