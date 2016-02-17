@@ -38,22 +38,39 @@ defmodule Exoddic do
     """
     @spec convert(number | String.t, exoddic_options) :: String.t | float
     def convert(amount, options \\ []) do
-      num_amount  = if is_bitstring(amount), do: destring(amount), else: amount
       {from_module, to_module, for_display} = parse_options(options)
 
-      final_amount = num_amount |> from_module.to_prob |> to_module.from_prob
+      final_amount = amount |> normalize |> from_module.to_prob |> to_module.from_prob
 
       if for_display, do: to_module.for_display(final_amount), else: final_amount
     end
 
-    @spec destring(String.t) :: float
-    defp destring(maybe_num) do
-      num = cond do
-          Regex.match?(~r/^[0-9\/+-\.]+$/, maybe_num) -> Code.eval_string(maybe_num) |> (fn({x,_}) -> x end).()
-          Regex.match?(~r/^[0-9\/\.]+%$/, maybe_num)  -> String.strip(maybe_num,?%) |> Float.parse |> (fn({x,_}) -> x/100 end).()
-          true                                        -> 0.0  # We don't handle strings we cannot easily understand as numbers
+    @spec normalize(number | String.t) :: float
+    defp normalize(amount) when is_number(amount), do: amount/1.0   # Guarantee float
+    defp normalize(amount) when is_bitstring(amount) do
+      captures = Regex.named_captures(~r/^(?<s>[\+-])?(?<n>[\d\.]+)(?<q>\/)?(?<d>[\d\.]+)?(?<p>%)?$/, amount)
+      modifier = case captures do
+          %{"s" => "-", "p" => "%"} -> -1.0/100.0 # Both sounds crazy
+          %{"s" => "-"}             -> -1.0
+          %{"p" => "%"}             -> 1/100
+          _                         -> 1.0        # Unmodified: covers nil, a "+" sign, etc.
       end
-      num / 1.0
+
+      case captures do
+          nil                               -> 0.0 # Not even close
+          %{"n" => ""}                      -> 0.0 # Does not parse
+          %{"q" => "/", "d" => ""}          -> 0.0 # Improper parse
+          %{"q" => "",  "n" => n}           -> fparse(n)
+          %{"q" => "/", "n" => n, "d" => d} -> fparse(n)/fparse(d)
+      end
+      |> (&(&1 * modifier)).()
+    end
+
+    @spec fparse(String.t) :: float
+    defp fparse(str) do
+          # We'll just assume we got reasonable stuff
+          {x, _} = Float.parse(str)
+          x
     end
 
 end

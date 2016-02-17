@@ -4,8 +4,8 @@ defmodule ExoddicTest do
   doctest Exoddic
 
   test "defaults and options" do
-    assert convert("50.25%")                                       == "50%",  ":prob to :prob for display"
-    assert convert("50.25%", for_display: false)                   == 0.5025, ":prob to :prob not for display"
+    assert convert("50.50%")                                       == "51%",  ":prob to :prob for display"
+    assert convert("50.50%", for_display: false)                   == 0.5050, ":prob to :prob not for display"
     assert convert(0.50, to: :us)                                  == "+100", ":prob to :us for display"
     assert convert(0.50, to: :us, for_display: false)              == 100,    ":prob to :us not for display"
     assert convert("+400", from: :us)                              == "20%",  ":us to :prob for display"
@@ -111,7 +111,12 @@ defmodule ExoddicTest do
     assert convert("-0.00", from: :my, to: :hk) == "0.000", "MY to HK"
     assert convert(0.0, from: :hk, to: :roi)    == "0%",    "HK to ROI"
     assert convert(0.0, from: :roi, to: :prob)  == "0%",    "ROI to Prob"
-    assert convert("junk", from: :us, to: :uk)  == "0/1",   "US to UK"
+  end
+
+  test "other junk to zero" do
+    assert convert("junk", from: :us, to: :uk)  == "0/1",  "No random strings"
+    assert convert("%85", from: :eu, to: :us)  == "+0",    "Properly formatted percentages"
+    assert convert("8*5", from: :us, to: :eu)  == "0.000", "No code eval"
   end
 
 end
