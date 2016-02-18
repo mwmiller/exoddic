@@ -48,7 +48,7 @@ defmodule Exoddic do
     @spec normalize(number | String.t) :: float
     defp normalize(amount) when is_number(amount), do: amount/1.0   # Guarantee float
     defp normalize(amount) when is_bitstring(amount) do
-      captures = Regex.named_captures(~r/^(?<s>[\+-])?(?<n>[\d\.]+)(?<q>\/)?(?<d>[\d\.]+)?(?<p>%)?$/, amount)
+      captures = Regex.named_captures(~r/^(?<s>[\+-])?(?<n>[\d\.]+)(?<q>[\/:])?(?<d>[\d\.]+)?(?<p>%)?$/, amount)
       modifier = case captures do
           %{"s" => "-", "p" => "%"} -> -1.0/100.0 # Both sounds crazy
           %{"s" => "-"}             -> -1.0
@@ -57,11 +57,11 @@ defmodule Exoddic do
       end
 
       case captures do
-          nil                               -> 0.0 # Not even close
-          %{"n" => ""}                      -> 0.0 # Does not parse
-          %{"q" => "/", "d" => ""}          -> 0.0 # Improper parse
-          %{"q" => "",  "n" => n}           -> fparse(n)
-          %{"q" => "/", "n" => n, "d" => d} -> fparse(n)/fparse(d)
+          nil                     -> 0.0       # Not even close
+          %{"n" => ""}            -> 0.0       # Does not parse a numerator
+          %{"q" => "",  "n" => n} -> fparse(n) # No quotient operator, just numerator
+          %{"d" => ""}            -> 0.0       # Quotient without denominator, failure
+          %{"n" => n, "d" => d}   -> fparse(n)/fparse(d)
       end
       |> (&(&1 * modifier)).()
     end
