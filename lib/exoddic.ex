@@ -8,11 +8,11 @@ defmodule Exoddic do
     A keyword list with conversion options
 
     The `to` and `from` formats are identified by atoms corresponding to
-    the converter module names. They default to ':prob'
+    the converter module names. They default to `:prob`
 
     - `from`: the supplied input format
     - `to`: the desired output format
-    - `for_display`: whether to nicely format the output as a string, defaults to true
+    - `for_display`: whether to nicely format the output as a string, defaults to `true`
 
     """
     @type exoddic_options :: [from: atom, to: atom, for_display: boolean]
