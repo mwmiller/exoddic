@@ -69,7 +69,7 @@ defmodule Exoddic do
     @spec fparse(String.t) :: float
     defp fparse(str) do
           # We'll just assume we got reasonable stuff
-          {x, _} = Float.parse(str)
+          {x, _remainder} = Float.parse(str)
           x
     end
 
