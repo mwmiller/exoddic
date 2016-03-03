@@ -56,14 +56,14 @@ defmodule Exoddic do
           _                         -> 1.0        # Unmodified: covers nil, a "+" sign, etc.
       end
 
-      case captures do
+      value = case captures do
           nil                     -> 0.0       # Not even close
           %{"n" => ""}            -> 0.0       # Does not parse a numerator
           %{"q" => "",  "n" => n} -> fparse(n) # No quotient operator, just numerator
           %{"d" => ""}            -> 0.0       # Quotient without denominator, failure
           %{"n" => n, "d" => d}   -> fparse(n)/fparse(d)
       end
-      |> (&(&1 * modifier)).()
+      value * modifier
     end
 
     @spec fparse(String.t) :: float
