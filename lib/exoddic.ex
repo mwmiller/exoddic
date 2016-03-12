@@ -48,7 +48,7 @@ defmodule Exoddic do
     @spec normalize(number | String.t) :: float
     defp normalize(amount) when is_number(amount), do: amount/1.0   # Guarantee float
     defp normalize(amount) when is_bitstring(amount) do
-      captures = Regex.named_captures(~r/^(?<s>[\+-])?(?<n>[\d\.]+)(?<q>[\/:])?(?<d>[\d\.]+)?(?<p>%)?$/, amount)
+      captures = Regex.named_captures(~r/^(?<s>[\+-])?(?<n>[\d\.]+)(?<q>[\/:-])?(?<d>[\d\.]+)?(?<p>%)?$/, amount)
       modifier = case captures do
           %{"s" => "-", "p" => "%"} -> -1.0/100.0 # Both sounds crazy
           %{"s" => "-"}             -> -1.0

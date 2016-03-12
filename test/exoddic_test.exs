@@ -17,7 +17,7 @@ defmodule ExoddicTest do
   test "to probability - even money" do
     assert convert("+100", from: :us, to: :prob) == "50%", "US"
     assert convert(2.0, from: :eu, to: :prob)    == "50%", "EU"
-    assert convert("1/1", from: :uk, to: :prob)  == "50%", "UK"
+    assert convert("1-1", from: :uk, to: :prob)  == "50%", "UK"
     assert convert(-1.00, from: :id, to: :prob)  == "50%", "ID"
     assert convert(1.00, from: :my, to: :prob)   == "50%", "MY"
     assert convert(1.00, from: :hk, to: :prob)   == "50%", "HK"
@@ -106,7 +106,7 @@ defmodule ExoddicTest do
     assert convert(0, from: :prob, to: :roi)    == "0%",    "ROI"
     assert convert("+0", from: :us, to: :eu)    == "0.000", "US to EU"
     assert convert("0.0", from: :eu, to: :uk)   == "0/1",   "EU to UK"
-    assert convert("0/1", from: :uk, to: :id)   == "0.000", "UK to ID"
+    assert convert("0-1", from: :uk, to: :id)   == "0.000", "UK to ID"
     assert convert("-0", from: :id, to: :my)    == "0.000", "ID to MY"
     assert convert("-0.00", from: :my, to: :hk) == "0.000", "MY to HK"
     assert convert(0.0, from: :hk, to: :roi)    == "0%",    "HK to ROI"
@@ -117,7 +117,13 @@ defmodule ExoddicTest do
     assert convert("junk", from: :us, to: :uk)  == "0/1",   "No random strings"
     assert convert("%85", from: :eu, to: :us)   == "+0",    "Properly formatted percentages"
     assert convert("8*5", from: :us, to: :eu)   == "0.000", "No real math"
-    assert convert("8-5", from: :eu, to: :prob) == "0%",    "Signs at the front"
+    assert convert("85-", from: :eu, to: :prob) == "0%",    "Signs at the front"
+  end
+
+  test "UK-style misinterpreted" do
+    assert convert("8-1", from: :eu, to: :uk)  == "7/1",  "Thinking UK odds are EU is slightly bad."
+    assert convert("8-1", from: :us, to: :uk)  == "2/25", "Thinking UK odds are US is very bad."
+    assert convert("1-1", to: :uk)             == "0/1",  "Thinking UK odds are probs is deadly."
   end
 
 end
