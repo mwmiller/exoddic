@@ -67,10 +67,6 @@ defmodule Exoddic do
     end
 
     @spec fparse(String.t) :: float
-    defp fparse(str) do
-          # We'll just assume we got reasonable stuff
-          {x, _remainder} = Float.parse(str)
-          x
-    end
+    defp fparse(str), do: str |> Float.parse |> elem(0) # This should be reasonable given how we parsed the above.
 
 end
