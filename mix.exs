@@ -3,7 +3,7 @@ defmodule Exoddic.Mixfile do
 
   def project do
     [app: :exoddic,
-     version: "1.3.3",
+     version: "1.3.4",
      elixir: "~> 1.3",
      name: "Exoddic",
      source_url: "https://github.com/mwmiller/exoddic",
@@ -21,7 +21,7 @@ defmodule Exoddic.Mixfile do
   defp deps do
     [
       {:earmark, "~> 1.0", only: :dev},
-      {:ex_doc, "~> 0.13", only: :dev},
+      {:ex_doc, "~> 0.14", only: :dev},
     ]
   end
   defp description do
