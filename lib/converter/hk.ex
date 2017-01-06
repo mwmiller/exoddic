@@ -12,6 +12,6 @@ defmodule Exoddic.Converter.Hk do
   def to_prob(amount) when amount != 0, do: 1 / (amount + 1)
 
   @doc "Formatted to three decimal places"
-  def for_display(amount), do: Float.to_string(amount, [decimals: 3])
+  def for_display(amount), do: :erlang.float_to_binary(amount, [decimals: 3])
 
 end

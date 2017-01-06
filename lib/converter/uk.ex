@@ -15,7 +15,7 @@ defmodule Exoddic.Converter.Uk do
     biggest = 1000
     num = amount * biggest |> round
     denom = gcd(num,biggest)
-    "#{Float.to_string(num/denom, [decimals: 0])}/#{Float.to_string(biggest/denom, [decimals: 0])}"
+    "#{:erlang.float_to_binary(num/denom, [decimals: 0])}/#{:erlang.float_to_binary(biggest/denom, [decimals: 0])}"
   end
 
   defp gcd(a,0), do: a

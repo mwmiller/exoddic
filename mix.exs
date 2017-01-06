@@ -3,15 +3,15 @@ defmodule Exoddic.Mixfile do
 
   def project do
     [app: :exoddic,
-     version: "1.3.4",
-     elixir: "~> 1.3",
+     version: "1.3.5",
+     elixir: "~> 1.4",
      name: "Exoddic",
      source_url: "https://github.com/mwmiller/exoddic",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     description: description,
-     package: package,
-     deps: deps]
+     description: description(),
+     package: package(),
+     deps: deps()]
   end
 
   def application do
