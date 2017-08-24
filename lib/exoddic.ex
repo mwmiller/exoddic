@@ -19,15 +19,15 @@ defmodule Exoddic do
 
     @spec parse_options(exoddic_options) :: {atom, atom, boolean}
     defp parse_options(options) do
-      { module_from_options(options,:from),
-        module_from_options(options, :to),
-        Keyword.get(options, :for_display, true)
+      {module_from_options(options, :from),
+       module_from_options(options, :to),
+       Keyword.get(options, :for_display, true)
       }
     end
 
     @spec module_from_options(exoddic_options, atom) :: atom
     defp module_from_options(options, which) do
-        Module.concat([__MODULE__, Converter, Keyword.get(options, which, :prob) |> Atom.to_string |> String.capitalize])
+        Module.concat([__MODULE__, Converter, options |> Keyword.get(which, :prob) |> Atom.to_string |> String.capitalize])
     end
 
     @doc """
@@ -46,24 +46,29 @@ defmodule Exoddic do
     end
 
     @spec normalize(number | String.t) :: float
-    defp normalize(amount) when is_number(amount), do: amount/1.0   # Guarantee float
+    defp normalize(amount) when is_number(amount), do: amount / 1.0   # Guarantee float
     defp normalize(amount) when is_bitstring(amount) do
       captures = Regex.named_captures(~r/^(?<s>[\+-])?(?<n>[\d\.]+)(?<q>[\/:-])?(?<d>[\d\.]+)?(?<p>%)?$/, amount)
-      modifier = case captures do
-          %{"s" => "-", "p" => "%"} -> -1.0/100.0 # Both sounds crazy
+      value_from_captures(captures) * modifier_from_captures(captures)
+    end
+
+    defp modifier_from_captures(cap) do
+      case cap do
+          %{"s" => "-", "p" => "%"} -> -1.0 / 100.0 # Both sounds crazy
           %{"s" => "-"}             -> -1.0
-          %{"p" => "%"}             -> 1/100
+          %{"p" => "%"}             -> 1 / 100
           _                         -> 1.0        # Unmodified: covers nil, a "+" sign, etc.
       end
+    end
 
-      value = case captures do
+    defp value_from_captures(cap) do
+      case cap do
           nil                     -> 0.0       # Not even close
           %{"n" => ""}            -> 0.0       # Does not parse a numerator
           %{"q" => "",  "n" => n} -> fparse(n) # No quotient operator, just numerator
           %{"d" => ""}            -> 0.0       # Quotient without denominator, failure
-          %{"n" => n, "d" => d}   -> fparse(n)/fparse(d)
+          %{"n" => n, "d" => d}   -> fparse(n) / fparse(d)
       end
-      value * modifier
     end
 
     @spec fparse(String.t) :: float

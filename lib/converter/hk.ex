@@ -5,8 +5,8 @@ defmodule Exoddic.Converter.Hk do
   """
 
   def from_prob(amount) when amount == 0.00, do: 0.0
-  def from_prob(amount) when amount >= 0.50, do: 1 /amount - 1
-  def from_prob(amount) when amount <  0.50, do: (1 - amount)/amount
+  def from_prob(amount) when amount >= 0.50, do: (1 / amount) - 1
+  def from_prob(amount) when amount <  0.50, do: (1 - amount) / amount
 
   def to_prob(amount) when amount == 0, do: 0.0
   def to_prob(amount) when amount != 0, do: 1 / (amount + 1)
