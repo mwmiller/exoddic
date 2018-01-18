@@ -2,16 +2,18 @@ defmodule Exoddic.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :exoddic,
-     version: "1.3.6",
-     elixir: "~> 1.4",
-     name: "Exoddic",
-     source_url: "https://github.com/mwmiller/exoddic",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     description: description(),
-     package: package(),
-     deps: deps()]
+    [
+      app: :exoddic,
+      version: "1.3.6",
+      elixir: "~> 1.4",
+      name: "Exoddic",
+      source_url: "https://github.com/mwmiller/exoddic",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
+      deps: deps()
+    ]
   end
 
   def application do
@@ -22,9 +24,10 @@ defmodule Exoddic.Mixfile do
     [
       {:earmark, "~> 1.0", only: :dev},
       {:ex_doc, "~> 0.14", only: :dev},
-      {:credo, "~> 0.7", only: [:dev, :test]},
+      {:credo, "~> 0.7", only: [:dev, :test]}
     ]
   end
+
   defp description do
     """
     Odds and probability handling and conversions
@@ -33,11 +36,10 @@ defmodule Exoddic.Mixfile do
 
   defp package do
     [
-     files: ["lib", "mix.exs", "README*", "LICENSE*", ],
-     maintainers: ["Matt Miller"],
-     licenses: ["MIT"],
-     links: %{"GitHub" => "https://github.com/mwmiller/exoddic",}
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
+      maintainers: ["Matt Miller"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/mwmiller/exoddic"}
     ]
   end
-
 end

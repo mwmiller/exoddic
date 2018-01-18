@@ -10,6 +10,5 @@ defmodule Exoddic.Converter do
   @callback to_prob(float) :: float
 
   @doc "Format the value for 'nice' display"
-  @callback for_display(float) :: String.t
-
+  @callback for_display(float) :: String.t()
 end

@@ -5,7 +5,7 @@ defmodule Exoddic.Converter.Uk do
   """
 
   def from_prob(amount) when amount == 0, do: 0.0
-  def from_prob(amount) when amount != 0, do: (1 / amount) - 1
+  def from_prob(amount) when amount != 0, do: 1 / amount - 1
 
   def to_prob(amount) when amount == 0, do: 0.0
   def to_prob(amount) when amount != 0, do: 1 / (amount + 1)
@@ -15,10 +15,12 @@ defmodule Exoddic.Converter.Uk do
     biggest = 1000
     num = round(amount * biggest)
     denom = gcd(num, biggest)
-    "#{:erlang.float_to_binary(num/denom, [decimals: 0])}/#{:erlang.float_to_binary(biggest/denom, [decimals: 0])}"
+
+    "#{:erlang.float_to_binary(num / denom, decimals: 0)}/#{
+      :erlang.float_to_binary(biggest / denom, decimals: 0)
+    }"
   end
 
   defp gcd(a, 0), do: a
   defp gcd(a, b), do: gcd(b, rem(a, b))
-
 end

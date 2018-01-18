@@ -9,6 +9,5 @@ defmodule Exoddic.Converter.Prob do
   def to_prob(amount), do: amount
 
   @doc "Formatted as an integer percentage"
-  def for_display(amount), do: "#{round(amount*100)}%"
-
+  def for_display(amount), do: "#{round(amount * 100)}%"
 end
